@@ -61,9 +61,34 @@ function int() {
       document.getElementById('puzzleTitle').innerHTML = "Puzzle 1";
       // DDOES: Insert the HTML code for the first puzzle
       document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
+      // DDOES: Add event handlers for the puzzle buttons
+      // DVARO:
+      var puzzleButtons = document.getElementsByClassName("puzzles");
+      // DLOOP:
+      for (var i = 0; i < puzzleButtons.length; i++) {
+            puzzleButtons[i].onclick = swapPuzzle;
+      }
 };
-
-
+// DFUNC:
+function swapPuzzle(e) {
+      // DVARS:
+      var puzzleID = e.target.id;
+      var puzzleTitle = e.target.value;
+      // DDOES:
+      document.getElementById('puzzleTitle').innerHTML = puzzleTitle;
+      // DSWCA:
+      switch (puzzleID) {
+            case "puzzle1":
+                  document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
+                  break;
+            case "puzzle2":
+                  document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle2Hint, puzzle2Rating, puzzle2);
+                  break;
+            case "puzzle3":
+                  document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle3Hint, puzzle3Rating, puzzle3);
+                  break;
+      }
+}
 
 
 
