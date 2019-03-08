@@ -55,6 +55,8 @@
 */
 // DDOES: loads the fnction int when page is loaded
 window.onload = int;
+// DVARG:
+var puzzleCells, cellBackground;
 // DFUNC: int function
 function int() {
       // DDOES: Insert the tittle for the first puzzle
@@ -68,6 +70,10 @@ function int() {
       for (var i = 0; i < puzzleButtons.length; i++) {
             puzzleButtons[i].onclick = swapPuzzle;
       }
+      // DDOES: Calls the setupPuzzle function
+      setupPuzzle();
+      // Add an event listner for the mouseUp event
+      document.addEventListener("mouseup", endBackground);
 };
 // DFUNC:
 function swapPuzzle(e) {
@@ -87,6 +93,40 @@ function swapPuzzle(e) {
             case "puzzle3":
                   document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle3Hint, puzzle3Rating, puzzle3);
                   break;
+      }
+      // DDOES:
+      setupPuzzle();
+}
+// DFUNC:
+function setupPuzzle() {
+      /* Match all of the data cells in the puzzle */
+      puzzleCells = document.querySelectorAll("table#hanjieGrid td");
+      /* Set the intial color of each cell to gold */
+      for (var i = 0; i < puzzleCells.length; i++) {
+            puzzleCells[i].style.backgroundColor = "rgb(233, 207, 29)";
+            // Set the cell background color in response to the mousedown event
+            puzzleCells[i].onmousedown = setBackground;
+      }
+};
+// DFUNC:
+function setBackground(e) {
+      cellBackground = "rgb(101, 101, 101)";
+      e.target.style.backgroundColor = cellBackground;
+      // Create an event listener for every puzzle cell
+      for (var i = 0; i < puzzleCells.length; i++) {
+            puzzleCells[i].addEventListener('mouseenter', extendBackground);
+      }
+      e.preventDefault();
+}
+// DFUNC:
+function extendBackground(e) {
+      e.target.style.backgroundColor = cellBackground;
+}
+// DFUNC:
+function endBackground() {
+      // Remove the event litener for every puzzle cell
+      for (var i = 0; i < puzzleCells.length; i++) {
+            puzzleCells[i].removeEventListener('mouseenter', extendBackground);
       }
 }
 
