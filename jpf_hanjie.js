@@ -84,25 +84,27 @@ function int() {
 };
 // DFUNC:
 function swapPuzzle(e) {
-      // DVARS:
-      var puzzleID = e.target.id;
-      var puzzleTitle = e.target.value;
-      // DDOES:
-      document.getElementById('puzzleTitle').innerHTML = puzzleTitle;
-      // DSWCA:
-      switch (puzzleID) {
-            case "puzzle1":
-                  document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
-                  break;
-            case "puzzle2":
-                  document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle2Hint, puzzle2Rating, puzzle2);
-                  break;
-            case "puzzle3":
-                  document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle3Hint, puzzle3Rating, puzzle3);
-                  break;
+      if (confirm("You will lose all of your work on the puzzle!")) {
+            // DVARS:
+            var puzzleID = e.target.id;
+            var puzzleTitle = e.target.value;
+            // DDOES:
+            document.getElementById('puzzleTitle').innerHTML = puzzleTitle;
+            // DSWCA:
+            switch (puzzleID) {
+                  case "puzzle1":
+                        document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
+                        break;
+                  case "puzzle2":
+                        document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle2Hint, puzzle2Rating, puzzle2);
+                        break;
+                  case "puzzle3":
+                        document.getElementById('puzzle').innerHTML = drawPuzzle(puzzle3Hint, puzzle3Rating, puzzle3);
+                        break;
+            }
+            // DDOES:
+            setupPuzzle();
       }
-      // DDOES:
-      setupPuzzle();
 }
 // DFUNC:
 function setupPuzzle() {
@@ -116,6 +118,17 @@ function setupPuzzle() {
             // Use a pencil image as the cursor
             puzzleCells[i].style.cursor = "url(jpf_pencil.png), pointer";
       }
+      // Check the puzzle solution
+      document.getElementById('hanjieGrid').addEventListener('mouseup', function () {
+            var solved = true;
+            for (var i = 0; i < puzzleCells.length; i++) {
+                  if ((puzzleCells[i].className === "filled" && puzzleCells[i].style.backgroundColor !== "rgb(101, 101, 101)") || (puzzleCells[i].className === "empty" && puzzleCells[i].backgroundColor === "rgb(101, 101, 101)")) {
+                        solved = false;
+                        break;
+                  }
+            }
+            if (solved) alert("You solved the Puzzle");
+      });
       // Create object collections of the filled and empty cells
       var filled = document.querySelectorAll('table#hanjieGrid td.filled');
       var empty = document.querySelectorAll('table#hanjieGrid td.empty');
@@ -127,11 +140,24 @@ function setupPuzzle() {
                         filled[i].style.backgroundColor = "rgb(255, 211, 211)";
                   }
             }
+            // Display incorrect gray cells in red
             for (var i = 0; i < empty.length; i++) {
                   if (empty[i].style.backgroundColor === "rgb(101, 101, 101)") {
                         empty[i].style.backgroundColor = "rgb(255, 101, 101)";
                   }
             }
+            setTimeout(
+                  function () {
+                        // Change pink cells to white and red cells to gray
+                        for (var i = 0; i < puzzleCells.length; i++) {
+                              if (puzzleCells[i].style.backgroundColor === "rgb(255, 211, 211)") {
+                                    puzzleCells[i].style.backgroundColor = "rgb(255,255,255)";
+                              }
+                              if (puzzleCells[i].style.backgroundColor === "rgb(255, 101, 101)") {
+                                    puzzleCells[i].style.backgroundColor = "rgb(101,101,101)";
+                              }
+                        }
+                  }, 500);
       });
 };
 // DFUNC:
@@ -169,7 +195,6 @@ function endBackground() {
             puzzleCells[i].style.cursor = "url(jpf_pencil.png), pointer"
       }
 }
-
 
 
 /* ================================================================= */
